@@ -1,17 +1,15 @@
 import 'package:flutter/material.dart';
 
 class CategoryDetailScreen extends StatelessWidget {
-  final String categoryId;
-  final String categoryTitle;
-
-  const CategoryDetailScreen({
-    Key key,
-    this.categoryId,
-    this.categoryTitle,
-  }) : super(key: key);
+  static const routeName = '/categoryDetail';
 
   @override
   Widget build(BuildContext context) {
+    final args =
+        ModalRoute.of(context).settings.arguments as Map<String, String>;
+    final categoryId = args['id'];
+    final categoryTitle = args['title'];
+
     return Scaffold(
       appBar: AppBar(
         title: Text(categoryTitle),
