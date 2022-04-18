@@ -1,31 +1,41 @@
 import 'package:flutter/material.dart';
+import 'package:the_menu/models/meal.dart';
 import 'package:the_menu/screens/categories_screen.dart';
 import 'package:the_menu/screens/favorites_screen.dart';
 import 'package:the_menu/widgets/main_drawer.dart';
 
 class TabsScreen extends StatefulWidget {
+  final List<Meal> favMeals;
+
+  const TabsScreen({
+    Key key,
+    this.favMeals,
+  }) : super(key: key);
+
   @override
   _TabsScreenState createState() => _TabsScreenState();
 }
 
 class _TabsScreenState extends State<TabsScreen> {
-  List<Map<String, Object>> _pages = [
-    {
-      'page': CategoriesScreen(),
-      'title': 'Categories',
-    },
-    {
-      'page': FavoritesScreen(),
-      'title': 'Favorites',
-    },
-  ];
+  List<Map<String, Object>> _pages;
 
   int _selectedIndex = 0;
 
-  void _selectPage(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
+  @override
+  void initState() {
+    _pages = [
+      {
+        'page': CategoriesScreen(),
+        'title': 'Categories',
+      },
+      {
+        'page': FavoritesScreen(
+          favMeals: widget.favMeals,
+        ),
+        'title': 'Favorites',
+      },
+    ];
+    super.initState();
   }
 
   @override
@@ -57,5 +67,11 @@ class _TabsScreenState extends State<TabsScreen> {
         ],
       ),
     );
+  }
+
+  void _selectPage(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
   }
 }

@@ -7,10 +7,20 @@ import '../dummy_data.dart';
 class MealDetailScreen extends StatelessWidget {
   static const routeName = '/mealDetail';
 
+  final Function isFav;
+  final Function toggleMeal;
+
+  const MealDetailScreen({
+    Key key,
+    this.isFav,
+    this.toggleMeal,
+  }) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     final mealId = ModalRoute.of(context).settings.arguments as String;
     final selectedMeal = DUMMY_MEALS.firstWhere((meal) => meal.id == mealId);
+
     return Scaffold(
       appBar: AppBar(
         title: Text('${selectedMeal.title}'),
@@ -64,8 +74,8 @@ class MealDetailScreen extends StatelessWidget {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.delete),
-        onPressed: () => Navigator.of(context).pop(mealId),
+        child: Icon(isFav(mealId) ? Icons.star : Icons.star_border_outlined),
+        onPressed: () => toggleMeal(mealId),
       ),
     );
   }

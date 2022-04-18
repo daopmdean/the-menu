@@ -24,6 +24,53 @@ class _MyAppState extends State<MyApp> {
     'vegetarian': false,
   };
   List<Meal> _availableMeals = DUMMY_MEALS;
+  List<Meal> _favMeals = [];
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'The Menu',
+      theme: ThemeData(
+        primarySwatch: Colors.pink,
+        accentColor: Colors.amber,
+        canvasColor: Color.fromRGBO(255, 254, 229, 1),
+        fontFamily: 'Raleway',
+        textTheme: ThemeData.light().textTheme.copyWith(
+            bodyText2: TextStyle(
+              color: Color.fromRGBO(20, 51, 51, 1),
+            ),
+            bodyText1: TextStyle(
+              color: Color.fromRGBO(20, 51, 51, 1),
+            ),
+            headline6: TextStyle(
+              fontSize: 20,
+              fontFamily: 'RobotoCondensed',
+              fontWeight: FontWeight.bold,
+            )),
+      ),
+      initialRoute: '/',
+      routes: {
+        '/': (ctx) => TabsScreen(
+              favMeals: _favMeals,
+            ),
+        CategoryDetailScreen.routeName: (ctx) =>
+            CategoryDetailScreen(availableMeals: _availableMeals),
+        MealDetailScreen.routeName: (ctx) => MealDetailScreen(
+              isFav: _isFav,
+              toggleMeal: _toggleMeal,
+            ),
+        FiltersScreen.routeName: (ctx) => FiltersScreen(
+              filters: _filters,
+              setFilters: setFilters,
+            ),
+      },
+      onUnknownRoute: (settings) {
+        return MaterialPageRoute(
+          builder: (ctx) => CategoriesScreen(),
+        );
+      },
+    );
+  }
 
   void setFilters() {
     setState(() {
@@ -53,44 +100,19 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'The Menu',
-      theme: ThemeData(
-        primarySwatch: Colors.pink,
-        accentColor: Colors.amber,
-        canvasColor: Color.fromRGBO(255, 254, 229, 1),
-        fontFamily: 'Raleway',
-        textTheme: ThemeData.light().textTheme.copyWith(
-            bodyText2: TextStyle(
-              color: Color.fromRGBO(20, 51, 51, 1),
-            ),
-            bodyText1: TextStyle(
-              color: Color.fromRGBO(20, 51, 51, 1),
-            ),
-            headline6: TextStyle(
-              fontSize: 20,
-              fontFamily: 'RobotoCondensed',
-              fontWeight: FontWeight.bold,
-            )),
-      ),
-      initialRoute: '/',
-      routes: {
-        '/': (ctx) => TabsScreen(),
-        CategoryDetailScreen.routeName: (ctx) =>
-            CategoryDetailScreen(availableMeals: _availableMeals),
-        MealDetailScreen.routeName: (ctx) => MealDetailScreen(),
-        FiltersScreen.routeName: (ctx) => FiltersScreen(
-              filters: _filters,
-              setFilters: setFilters,
-            ),
-      },
-      onUnknownRoute: (settings) {
-        return MaterialPageRoute(
-          builder: (ctx) => CategoriesScreen(),
-        );
-      },
-    );
+  void _toggleMeal(String mealId) {
+    int indexFound = _favMeals.indexWhere((meal) => meal.id == mealId);
+    setState(() {
+      if (indexFound >= 0) {
+        _favMeals.removeAt(indexFound);
+      } else {
+        Meal meal = DUMMY_MEALS.firstWhere((meal) => meal.id == mealId);
+        _favMeals.add(meal);
+      }
+    });
+  }
+
+  bool _isFav(String mealId) {
+    return _favMeals.any((meal) => meal.id == mealId);
   }
 }
