@@ -4,16 +4,20 @@ import 'package:the_menu/widgets/main_drawer.dart';
 class FiltersScreen extends StatefulWidget {
   static const routeName = '/filters';
 
+  final Map<String, bool> filters;
+  final Function setFilters;
+
+  const FiltersScreen({
+    Key key,
+    this.filters,
+    this.setFilters,
+  }) : super(key: key);
+
   @override
   _FiltersScreenState createState() => _FiltersScreenState();
 }
 
 class _FiltersScreenState extends State<FiltersScreen> {
-  bool _glutenFree = false;
-  bool _vegan = false;
-  bool _vegetarian = false;
-  bool _lactoseFree = false;
-
   Widget _buildSwitch(
     String title,
     String subTitle,
@@ -30,25 +34,29 @@ class _FiltersScreenState extends State<FiltersScreen> {
 
   void _updateGlutenFree(bool value) {
     setState(() {
-      _glutenFree = value;
+      widget.filters['gluten'] = value;
+      widget.setFilters();
     });
   }
 
   void _updateVegan(bool value) {
     setState(() {
-      _vegan = value;
+      widget.filters['vegan'] = value;
+      widget.setFilters();
     });
   }
 
   void _updateVegetarian(bool value) {
     setState(() {
-      _vegetarian = value;
+      widget.filters['vegetarian'] = value;
+      widget.setFilters();
     });
   }
 
   void _updateLactoseFree(bool value) {
     setState(() {
-      _lactoseFree = value;
+      widget.filters['lactose'] = value;
+      widget.setFilters();
     });
   }
 
@@ -72,25 +80,25 @@ class _FiltersScreenState extends State<FiltersScreen> {
               _buildSwitch(
                 'Gluten-free',
                 'Only gluten-free meals',
-                _glutenFree,
+                widget.filters['gluten'],
                 _updateGlutenFree,
               ),
               _buildSwitch(
                 'Vegan',
                 'Only Vegan meals',
-                _vegan,
+                widget.filters['vegan'],
                 _updateVegan,
               ),
               _buildSwitch(
                 'Vegetarian',
                 'Only Vegetarian meals',
-                _vegetarian,
+                widget.filters['vegetarian'],
                 _updateVegetarian,
               ),
               _buildSwitch(
-                'Gluten-free',
-                'Only gluten-free meals',
-                _lactoseFree,
+                'Lactose-free',
+                'Only lactose-free meals',
+                widget.filters['lactose'],
                 _updateLactoseFree,
               ),
             ],
