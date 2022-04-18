@@ -8,8 +8,10 @@ class FavoritesScreen extends StatefulWidget {
 class _FavoritesScreenState extends State<FavoritesScreen> {
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Text('Fav'),
+    return Container(
+      child: Center(
+        child: Text('Fav'),
+      ),
     );
   }
 }
